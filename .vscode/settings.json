@@ -14,6 +14,22 @@
         "unordered_set": "cpp",
         "vector": "cpp",
         "initializer_list": "cpp",
-        "regex": "cpp"
-    }
+        "regex": "cpp",
+        "fstream": "cpp",
+        "functional": "cpp",
+        "shared_mutex": "cpp",
+        "sstream": "cpp",
+        "tuple": "cpp",
+        "bitset": "cpp",
+        "ostream": "cpp"
+    },
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        ".",
+        "-p",
+        "*test.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
 }
