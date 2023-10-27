@@ -21,7 +21,8 @@
         "sstream": "cpp",
         "tuple": "cpp",
         "bitset": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iosfwd": "cpp"
     },
     "python.testing.unittestArgs": [
         "-v",
