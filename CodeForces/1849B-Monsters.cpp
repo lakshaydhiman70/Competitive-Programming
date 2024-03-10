@@ -23,8 +23,6 @@ int main(){
         vector<int> ord(n);
         iota(ord.begin(), ord.end(), 0);
 
-        // for (auto &x : v) cout << x << ' ';
-
         stable_sort(ord.begin(), ord.end(), [&](int i, int j) {
             return v[i] > v[j];
         });

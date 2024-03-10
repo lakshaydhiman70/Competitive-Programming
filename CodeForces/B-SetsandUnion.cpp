@@ -11,10 +11,10 @@ int mergeSets(vector<vector<int>>&vec1, vector<int>&vec){
             mergedSet.insert(res1);
         }
     }
-    for(auto res: mergedSet){
-        cout<<res<<" ";
-    }
-    cout<<endl;
+    // for(auto res: mergedSet){
+    //     cout<<res<<" ";
+    // }
+    // cout<<endl;
 
     int mx = INT_MIN;
     auto tempVec = vec;
