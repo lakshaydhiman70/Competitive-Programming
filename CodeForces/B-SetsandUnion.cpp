@@ -3,16 +3,34 @@
 typedef long long ll;
 using namespace std;
 
-void mergetTwoSets(vector<int>&vec, vector<int>&vec1){
-    
-}
-
-void mergeSets(vector<vector<int>>&vec1, vector<int>&vec){
+int mergeSets(vector<vector<int>>&vec1, vector<int>&vec){
+    set<int>mergedSet;
     for(auto res: vec1){
         for(auto res1: res){
             vec[res1]++;
+            mergedSet.insert(res1);
         }
     }
+    // for(auto res: mergedSet){
+    //     cout<<res<<" ";
+    // }
+    // cout<<endl;
+
+    int mx = INT_MIN;
+    auto tempVec = vec;
+    for(auto res: vec1){
+        tempVec = vec;
+        for(auto res1: res){
+            tempVec[res1]--;
+        }
+        int temp = 0;
+
+        for(int i=0;i<tempVec.size();i++){
+            if(tempVec[i]!=0)temp++;
+        }
+        mx = temp == mergedSet.size()?mx:max(mx, temp);
+    }
+    return mx;
 }
 
 int main(){
@@ -37,12 +55,8 @@ int main(){
             }
             sets.push_back(vec);
         }
-        for(auto res: sets){
-            for(auto test: res){
-                cout<<test<<" ";
-            }
-            cout<<endl;
-        }
+
+        int value = mergeSets(sets, arr);
+        cout<<value<<endl;
     }
-    
 }

@@ -69,14 +69,45 @@ int LowerBound(vector<int> &vec, int n, int target)
     return ans;
 }
 
+//Lower bound practice
+int lowerBoundPrac(vector<int>&vec, int n, int target){
+    int low = 0, high = n-1, mid, ans = n;
+    while(low <= high){
+        mid = (low+high)/2;
+        if(vec[mid]>=target){
+            ans = mid;
+            high = mid-1;
+        }
+        else{
+            low = mid+1;
+        }
+    }
+    return ans;
+}
+
+//smallest index where arr[index] is greater than the target
+int upperBoundPrac(vector<int>&vec, int n, int target){
+    int low = 0, high = n-1, mid, ans = n;
+    while(low <= high){
+        int mid = (low + high)/2;
+        if(vec[mid]>target){
+            ans = mid;
+            high = mid-1;
+        }
+        else{
+            low = mid+1;
+        }
+    }
+    return ans;
+}
 
 int main()
 {
     vector<int> arr = {3, 5, 8, 15, 19};
-    int n = 5, x = 20;
-    int ind = LowerBound(arr, n, x);
-    int ind2 = lowerBound(arr, n, x);
-    cout << "The lower bound is the index: " << ind << "\n";
+    int n = 5, x = 3;
+    int ind = upperBoundPrac(arr, n, x);
+    int ind2 = upperBound(arr, n, x);
+    cout << "The upper bound is the index: " << ind << "\n";
     cout << "The upper bound is the index: " << ind2 << "\n";
     return 0;
 }

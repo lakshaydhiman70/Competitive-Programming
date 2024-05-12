@@ -18,8 +18,43 @@ int binarySearch(vector<int>&vec, int target){
     return -1;
 }
 
+int binarySearchPrac(int n, vector<int>&vec, int target){
+    int low=0, high = n-1, mid;
+    while(low <= high){
+        mid = (low+high)/2;
+        if(vec[mid] == target){
+            return mid;
+        }
+        else if(vec[mid] < target){
+            low = mid + 1;
+        }
+        else{
+            high = mid-1;
+        }
+    }
+    return -1;
+}
+
 int main(){
-    
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+        freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
+    #endif
+    int t;
+    cin>>t;
+    while(t--){
+        int n,k;
+        cin>>n>>k;
+        vector<int>v(n);
+
+        for(auto &inp: v){
+            cin>>inp;
+        }
+        sort(v.begin(), v.end());
+        cout<<binarySearchPrac(n, v, k);
+    }
 }
 
 //Below is the strivers implementation
