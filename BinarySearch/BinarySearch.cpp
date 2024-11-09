@@ -1,5 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
+
+/*
+    over flow condition in binary search.
+    mid = low + ((high - low)/2);
+*/
+
+
 int binarySearch(vector<int>&vec, int target){
     int n = vec.size();
     int low = 0, high = n-1;

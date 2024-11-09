@@ -6,7 +6,12 @@ using namespace std;
 //Eg- [1, 2, 3, 4, 5, 8, 8, 10, 15] Target - 6
 // For target - 6 output is 8 (ind - 5)
 // For target - 5 output is 5 (ind - 4)
-//in a sorted array where the value at that index is greater than or equal to a given key i.e. x.
+
+/*
+    in a sorted array where the value
+    at that index is greater than or equal to a given key i.e. x.
+*/
+
 int lowerBound(vector<int> arr, int n, int x) {
     int low = 0, high = n - 1;
     int ans = n;
@@ -25,6 +30,7 @@ int lowerBound(vector<int> arr, int n, int x) {
     }
     return ans;
 }
+
 //The upper bound algorithm finds the first or the smallest index in a sorted array
 // where the value at that index is greater than the given key i.e. x.
 int upperBound(vector<int> &arr, int n, int x) {

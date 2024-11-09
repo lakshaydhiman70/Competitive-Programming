@@ -8,7 +8,7 @@ void BfsTraversal(){
     #endif
     int n, m;
     cin>>n>>m;
-    int startingNode = 6;
+    int startingNode = 1;
     vector<int>adj[n+1];
     vector<int>vis(n+1, 0);
     queue<int>que;
