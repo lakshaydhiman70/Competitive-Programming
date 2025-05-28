@@ -1,0 +1,428 @@
+pipeline {
+    agent any
+    stages {
+		stage('Stop all the services') {
+            steps {
+				script {
+					try {
+						bat 'net stop PradMan.GravityX2.WebApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net stop PradMan.Debtonator.Auditing.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net stop PradMan.GravityX2.AuthServer.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+               
+				script {
+					try {
+						 bat 'net stop PradMan.GravityX2.ContractSigning.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net stop PradMan.Debtonator.ContractStatus.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						 bat 'net stop PradMan.GravityX2.FeeManager.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						 bat 'net stop PradMan.Debtonator.Notifications.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net stop PradMan.GravityX2.Payment.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						 bat 'net stop PradMan.Debtonator.ReportingApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net stop PradMan.Debtonator.ScheduledTasks.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net stop PradMan.Debtonator.ConfigurationApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net stop PradMan.Debtonator.DocGen.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						bat 'net stop PradMan.Debtonator.TicketingApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+            }
+        }
+		
+		stage('delete all the services') {
+			steps {
+				script {
+					try {
+						bat 'sc delete PradMan.GravityX2.WebApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						bat 'sc delete PradMan.Debtonator.Auditing.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						bat 'sc delete PradMan.GravityX2.AuthServer.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						bat 'sc delete PradMan.GravityX2.ContractSigning.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						bat 'sc delete PradMan.Debtonator.ContractStatus.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						bat 'sc delete PradMan.GravityX2.FeeManager.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						bat 'sc delete PradMan.Debtonator.Notifications.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						bat 'sc delete PradMan.GravityX2.Payment.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						bat 'sc delete PradMan.Debtonator.ReportingApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						bat 'sc delete PradMan.Debtonator.ScheduledTasks.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						bat 'sc delete PradMan.Debtonator.ConfigurationApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						bat 'sc delete PradMan.Debtonator.DocGen.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						bat 'sc delete PradMan.Debtonator.TicketingApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+			}
+		}
+
+		
+        stage('Build API Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug C:/Work/CenturySS/API/debtonator-css-api/code/GravityX2.Api.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/PradMan.GravityX2.WebApi.Host/bin/Debug/PradMan.GravityX2.WebApi.Host.exe" install'
+                bat 'sc config PradMan.GravityX2.WebApi.Host start= auto'
+            }
+        }
+		stage('Build Auditing Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug C:/Work/CenturySS/API/debtonator-css-api/code/Debtonator.Auditing.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Debtonator.Auditing/PradMan.Debtonator.AuditingService.Host/bin/Debug/PradMan.Debtonator.AuditingService.Host" install'
+            }
+        }
+		stage('Build Auth Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug C:/Work/CenturySS/API/debtonator-css-api/code/GravityX2.Auth.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/PradMan.GravityX2.AuthServer.Host/bin/Debug/PradMan.GravityX2.AuthServer.Host.exe" install'
+            }
+        }
+		stage('Build ContractSigning Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug C:/Work/CenturySS/API/debtonator-css-api/code/GravityX2.ContractSigning.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/PradMan.GravityX2.ContractSigning.Host/bin/Debug/PradMan.GravityX2.ContractSigning.Host.exe" install'
+            }
+        }
+		stage('Build ContractStates Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug C:/Work/CenturySS/API/debtonator-css-api/code/Debtonator.ContractStates.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Debtonator.ContractStateChanges/PradMan.Debtonator.ContractStates.Host/bin/Debug/PradMan.Debtonator.ContractStates.Host.exe" install'
+            }
+        }
+		stage('Build FeeManagement Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug C:/Work/CenturySS/API/debtonator-css-api/code/Debtonator.FeeManagement.sln'
+								bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Debtonator.FeeManagement/PradMan.Debtonator.FeeManagement.Host/bin/Debug/PradMan.Debtonator.FeeManagement.Host.exe" install'
+            }
+        }
+		 stage('Build Notifications Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug  C:/Work/CenturySS/API/debtonator-css-api/code/Debtonator.Notifications.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Debtonator.Notifications/PradMan.Debtonator.Notifications.Host/bin/Debug/PradMan.Debtonator.Notifications.Host.exe" install'
+            }
+        }
+		stage('Build Payments Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug  C:/Work/CenturySS/API/debtonator-css-api/code/GravityX2.Payments.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/PradMan.GravityX2.PaymentIntegration.Host/bin/Debug/PradMan.GravityX2.PaymentIntegration.Host.exe" install'
+            }
+        }
+		stage('Build Reporting Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug  C:/Work/CenturySS/API/debtonator-css-api/code/Debtonator.Reporting.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Debtonator.Reporting/PradMan.Debtonator.Reporting.WebApi.Host/bin/Debug/PradMan.Debtonator.Reporting.WebApi.Host.exe" install'
+            }
+        }
+		stage('Build ScheduledTasks Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug  C:/Work/CenturySS/API/debtonator-css-api/code/Debtonator.ScheduledTasks.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Debtonator.Scheduler/PradMan.Debtonator.ScheduledTasksManager.Host/bin/Debug/PradMan.Debtonator.ScheduledTasksManager.Host.exe" install'
+            }
+        }
+        stage('Build Configuration Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug  C:/Work/CenturySS/API/debtonator-css-api/code/Pradman.GravityX2.Configuration.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Pradman.GravityX2.Configuration/Pradman.GravityX2.Configuration.WebApi.Host/bin/Debug/PradMan.GravityX2.Configuration.WebApi.Host.exe" install'
+            }
+        }
+		
+        stage('Build DocumentGenerator Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug  C:/Work/CenturySS/API/debtonator-css-api/code/Debtonator.DocumentGenerator.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Debtonator.Documents/PradMan.Debtonator.DocumentGenerator.Host/bin/Debug/PradMan.Debtonator.DocumentGenerator.Host.exe" install'
+            }
+        }
+		stage('Build Ticket Solution') {
+            steps {
+                bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe" /p:Configuration=Debug  C:/Work/CenturySS/API/debtonator-css-api/code/Debtonator.Ticketing.sln'
+				bat '"C:/Work/CenturySS/API/debtonator-css-api/code/src/Debtonator.Ticketing/PradMan.Debtonator.Ticketing.WebApi.Host/bin/Debug/PradMan.Debtonator.Ticketing.WebApi.Host.exe" install'
+            }
+        }
+        
+		stage('Start all the services') {
+            steps {
+				script {
+					try {
+						bat 'net start PradMan.GravityX2.WebApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net start PradMan.Debtonator.Auditing.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net start PradMan.GravityX2.AuthServer.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+               
+				script {
+					try {
+						 bat 'net start PradMan.GravityX2.ContractSigning.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net start PradMan.Debtonator.ContractStatus.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						 bat 'net start PradMan.GravityX2.FeeManager.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						 bat 'net start PradMan.Debtonator.Notifications.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						 bat 'net start PradMan.Debtonator.ReportingApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net start PradMan.Debtonator.ScheduledTasks.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net start PradMan.Debtonator.ConfigurationApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				script {
+					try {
+						 bat 'net start PradMan.Debtonator.DocGen.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						bat 'net start PradMan.GravityX2.Payment.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+				
+				script {
+					try {
+						bat 'net start PradMan.Debtonator.TicketingApi.Service'
+					}
+					catch(err){
+						bat 'echo err.getMessage()'
+					}
+				}
+            }
+        }
+    }
+}

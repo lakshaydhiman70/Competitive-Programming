@@ -1,62 +1,95 @@
 #include<bits/stdc++.h>
 using namespace std;
-void swap(vector<int> &v,int low, int high){
-    int temp = v[low];
-    v[low] = v[high];
-    v[high] = temp;
-}
-int sortPivot(vector<int>&v, int low, int high){
-    int n=high;
-    int piv = v[low];
 
-    while(low < high){
-        if(v[low]>piv){
-            swap(v,low,high);
-            //continue
+void comb(int idx, vector<int>&temp, vector<int>& nums, vector<vector<int>>& ans, int target){
+    if(idx == nums.size()){
+        if(target == 0){
+            ans.push_back(temp);
         }
-        else{
-            low++;
-        }
-        if(v[high]<piv){
-            swap(v,low,high);
-            //continue;
-        }else{
-            high--;
-        }
-        //low++;high--;
+        return;
     }
-    swap(v, 0, low);
-    return low;
+
+    if(nums[idx] <= target){
+        temp.push_back(nums[idx]);
+        comb(idx, temp, nums, ans, target-nums[idx]);
+        temp.pop_back();
+    }
+
+    comb(idx+1, temp, nums, ans, target);
 }
 
-void quickSort(vector<int>&v, int low, int high){
-    int pivIdx;
-    if(low+1 < high){
-        
-        pivIdx = sortPivot(v, low, high);
-        // cout<<v[pivIdx]<<" "<<pivIdx<<'\n';
-        quickSort(v, low, pivIdx-1);
-        quickSort(v, pivIdx+1, high);
+int maxArea(int h, int w, vector<int>& horizontalCuts, vector<int>& verticalCuts) {
+    int n = horizontalCuts.size();
+    int m = verticalCuts.size();
+    int maxhori = horizontalCuts[1] - horizontalCuts[0];
+    int maxver = verticalCuts[1] - verticalCuts[0];
+    for(int i=1;i<n;i++){
+        maxhori = (maxhori, horizontalCuts[i] - horizontalCuts[i-1]);
     }
+
+    for(int i=1;i<m;i++){
+        maxver = (maxver, verticalCuts[i] - verticalCuts[i-1]);
+    }
+
+    maxhori %= 1000000007;
+    maxver %= 1000000007;
+
+    long long ans = maxhori *1ll * maxver;
+    return ans;
+}
+
+/*
+    lets solve this by using iteratively
+*/
+
+int backTrack(int row, int col, vector<vector<int>>& grid){
+    
+    
+}
+
+int maxAreaOfIsland(vector<vector<int>>& grid) {
+    int n = grid.size(), m = n? grid[0].size(): 0, mxans = 0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(grid[i][j]==1){
+                mxans = max(mxans, backTrack(i, j, grid, ));
+            }
+        }
+    }
+    return mxans;
+}
+
+vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+    vector<vector<int>>ans;
+    vector<int>temp;
+    comb(0, temp, candidates, ans, target);
+    return ans;
+}
+
+int jump(vector<int>& nums) {
+    int n = nums.size();
+    int maxVal = 0;
+    int jumps = 0;
+    int currend = 0;
+    for(int i=0;i<n;i++){
+        maxVal = max(maxVal, nums[i] + i);
+        if(i == currend){
+            jumps++;
+            currend = maxVal;
+        }
+    }
+    return jumps;
 }
 
 int main(){
-    #ifndef ONLINE_JUDGE
-        freopen("input.txt", "r", stdin);
-        freopen("output.txt", "w", stdout);
-    #endif
-    ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    int n;cin>>n;
-    vector<int>v(n);
-    for(int i=0;i<n;i++){
-        cin>>v[i];
-    }
-    quickSort(v, 0, n-1);
+   vector<int>cand = {2,3,6,7};
+   int target = 7;
+   auto ans = combinationSum(cand, target);
 
-    // auto test = sortPivot(v, 0, n-1);
-
-    for(int i=0;i<n;i++){
-        cout<<v[i]<<" ";
-    }
-    cout<<endl;
+   for(auto &it : ans){
+        for(int &val: it){
+            cout<<val<<" ";
+        }
+        cout<<endl;
+   }
 }

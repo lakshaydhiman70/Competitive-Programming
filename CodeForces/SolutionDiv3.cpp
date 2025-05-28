@@ -1,34 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void solve(){
-	int n;
-	cin>>n;
-	
-	vector<int>ans;
-	for(int i=0;i<n;i++){
-		int x;
-		cin>>x;
-		
-		if(i != 0 && ans.back() > x){
-			ans.push_back(1);
+void moveZeroes(std::vector<int>& nums) {
+	int snowBallSize = 0; 
+	for (int i = 0; i < nums.size(); i++) {
+		if (nums[i] == 0) {
+			snowBallSize++; 
+		}
+		else if (snowBallSize > 0) {
+			int t = nums[i];
+			nums[i] = 0;
+			nums[i - snowBallSize] = t;
 		}
 
-		ans.push_back(x);
+		for(auto &it: nums){
+			cout<<it<<" ";
+		}
+		cout<<endl;
 	}
-	cout<<ans.size()<<endl;
-	for(auto ele: ans){
-		cout<<ele<<" ";
-	}
-	cout<<endl;
-}	
+}
 
 int main() {
-	int t;
-	cin>>t;
-	while(t--){
-		solve();
-		
-	}
+	vector<int>vec = {2,0,0,1,3,12};
+	moveZeroes(vec);
 	return 0;
 }
