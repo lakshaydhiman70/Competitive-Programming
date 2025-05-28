@@ -124,8 +124,8 @@ void solve() {
 int32_t main() {
     fastio;
     #ifndef ONLINE_JUDGE
-        freopen("../input.txt", "r", stdin);
-        freopen("../output.txt", "w", stdout);
+        freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
     #endif
     int t = 1;
     cin >> t;
