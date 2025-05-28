@@ -26,12 +26,15 @@ bool isValid(int start, int end, string s){
 bool hasSpecialSubstring(string s, int k) {
     int i = 0, j = k - 1;
     int n = s.size();
-    while(k<n){
+    while(j<n){
         if(isValid(i, j, s))return true;
+        i++;
+        j++;
     }
     return false;
 }
 
 int main(){
-    cout<<hasSpecialSubstring("abc", 2)<<endl;
+    bool res = hasSpecialSubstring("abs", 2);
+    cout<<res;
 }

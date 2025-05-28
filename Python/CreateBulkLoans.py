@@ -17,7 +17,7 @@ def login(wait, driver, username, password):
     Log into the website with the provided username and password.
     """
     # Navigate to the login page
-    driver.get("https://staging.acme.century-crm.com/")
+    driver.get("https://atlas.qa.century-crm.com/")
     
     # Enter username
     logging.info("Entering username")
@@ -143,15 +143,15 @@ def add_loan(driver, wait):
 
 try:
     logging.info("Opening the webpage")
-    driver.get("https://staging.acme.century-crm.com/")
+    driver.get("https://atlas.qa.century-crm.com/")
     
     # Wait for the page to load
     wait = WebDriverWait(driver, 20000000000000000000)
     
     #calling login
-    login(wait, driver, "vipinmittal@finxera.com", "12345678")
+    login(wait, driver, "bwatson@centuryss.com", "Century1")
 
-    client_ids = ["35504037"]  # Add other types here if needed
+    client_ids = ["36111500"]  # Add other types here if needed
 
     search_clients(driver, wait, client_ids)
 
