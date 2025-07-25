@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 #define int long long
@@ -28,18 +28,18 @@ using namespace std;
 #define rrep(i, a, b) for(int i = (b) - 1; i >= (a); --i)
 #define rep0(i, n) for(int i = 0; i < (n); ++i)
 
-#define setBit(n, pos)     ((n) | (1LL << (pos)))
-#define clearBit(n, pos)   ((n) & ~(1LL << (pos)))
-#define toggleBit(n, pos)  ((n) ^ (1LL << (pos)))
-#define checkBit(n, pos)   (((n) >> (pos)) & 1)
+#define setBit(n, pos)     ((n) | (1LL << (pos)))          // Set bit at pos
+#define clearBit(n, pos)   ((n) & ~(1LL << (pos)))         // Clear bit at pos
+#define toggleBit(n, pos)  ((n) ^ (1LL << (pos)))          // Toggle bit at pos
+#define checkBit(n, pos)   (((n) >> (pos)) & 1)            // Check if bit at pos is set
 
-#define countSetBits(n)    (__builtin_popcountll(n))
-#define trailingZeros(n)   (__builtin_ctzll(n))
-#define leadingZeros(n)    (__builtin_clzll(n))
+#define countSetBits(n)    (__builtin_popcountll(n))       // Count number of 1s
+#define trailingZeros(n)   (__builtin_ctzll(n))            // Count trailing 0s
+#define leadingZeros(n)    (__builtin_clzll(n))            // Count leading 0s (for 64-bit)
 
-#define isPowerOfTwo(n)    ((n) && !((n) & ((n) - 1)))
-#define lowestBit(n)       ((n) & -(n))
-#define turnOffLowestBit(n) ((n) & ((n) - 1))
+#define isPowerOfTwo(n)    ((n) && !((n) & ((n) - 1)))      // Check if n is power of two
+#define lowestBit(n)       ((n) & -(n))                     // Isolate lowest set bit
+#define turnOffLowestBit(n) ((n) & ((n) - 1))               // Turn off lowest set bit
 
 #define findMSB(n)       (63 - __builtin_clzll(n))
 
@@ -80,47 +80,23 @@ using namespace std;
     #define dbgv(v)
 #endif
 
+
 void solve() {
-    int n;
-    cin>>n;
+    int n, x, y;
+    cin>>n>>x>>y;
 
-    int total = (n * 2) + 1;
-    int noOfOne = 0;
-    for(int i=0; i<n; i++){
-        for(int j = 0; j < noOfOne; j++){
-            cout<<1;
-        }
+    vi v(n);
+    rv(v);
+    int ans = 0;
 
-        for(int k = noOfOne; k < n; k++){
-            cout<<0;
-        }
-
-        cout<<endl;
-
-        noOfOne++;
-    }
-
+    map<pair<int,int>, int>mp;
     rep0(i, n){
-        cout<<1;
+        int val1 = (v[i] % x), val2 = (v[i] % y);
+        ans += mp[{(x - val1)%x, val2}];
+        mp[{val1, val2}]++;
     }
-    cout<<endl;
 
-    noOfOne = n - 1;
-
-    rep0(i, n-1){
-
-        for(int j = 0; j < noOfOne; j++){
-            cout<<1;
-        }
-
-        for(int k = noOfOne; k < n; k++){
-            cout<<0;
-        }
-
-        cout<<endl;
-
-        noOfOne--;
-    }
+    cout<<ans<<endl;
 }
 
 int32_t main() {
@@ -130,6 +106,11 @@ int32_t main() {
         freopen("output.txt", "w", stdout);
     #endif
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--) solve();
 }
+
+/*
+here for the solution we need to find two numbers having same most significant bit and count the pairs that's it.
+eg: (4, 7), (6, 5), (2, 3)
+*/

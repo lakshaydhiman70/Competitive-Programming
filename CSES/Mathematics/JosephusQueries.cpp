@@ -80,47 +80,23 @@ using namespace std;
     #define dbgv(v)
 #endif
 
+int get_kth_removed(int n, int k) {
+    int offset = 1;
+    while (true) {
+        int removed = n / 2;
+        if (k <= removed) {
+            return offset * (2 * k);  // every even-indexed child eliminated
+        }
+        k -= removed;
+        n = (n + 1) / 2;   // remaining children
+        offset *= 2;       // positions now spread by powers of 2
+    }
+}
+
 void solve() {
-    int n;
-    cin>>n;
-
-    int total = (n * 2) + 1;
-    int noOfOne = 0;
-    for(int i=0; i<n; i++){
-        for(int j = 0; j < noOfOne; j++){
-            cout<<1;
-        }
-
-        for(int k = noOfOne; k < n; k++){
-            cout<<0;
-        }
-
-        cout<<endl;
-
-        noOfOne++;
-    }
-
-    rep0(i, n){
-        cout<<1;
-    }
-    cout<<endl;
-
-    noOfOne = n - 1;
-
-    rep0(i, n-1){
-
-        for(int j = 0; j < noOfOne; j++){
-            cout<<1;
-        }
-
-        for(int k = noOfOne; k < n; k++){
-            cout<<0;
-        }
-
-        cout<<endl;
-
-        noOfOne--;
-    }
+    int n, k;
+    cin>>n>>k;
+    cout<<get_kth_removed(n, k)<<endl;
 }
 
 int32_t main() {
@@ -130,6 +106,6 @@ int32_t main() {
         freopen("output.txt", "w", stdout);
     #endif
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--) solve();
 }
