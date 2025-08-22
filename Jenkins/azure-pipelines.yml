@@ -1,0 +1,109 @@
+parameters:
+- name: buildConfiguration
+  displayName: Build Configuration
+  type: string
+  default: 'Century-QA'
+  values:
+    - Production
+    - Century-QA
+
+trigger:
+- main
+
+pool:
+  name: Default
+  demands:
+    - agent.name -equals lakshay-windows-agent
+
+# Dynamically include variable groups based on the selected buildConfiguration
+variables:
+- ${{ if eq(parameters.buildConfiguration, 'Production') }}:
+  - group: Production
+- ${{ if eq(parameters.buildConfiguration, 'Century-QA') }}:
+  - group: Century-QA
+
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: ${{ parameters.buildConfiguration }}
+- name: deployRoot
+  value: 'C:\Deployed\HigbeeIntegration'
+- name: buildVersion
+  value: '1.0.0.$(Build.BuildId)'
+- name: siteName
+  value: 'HigbeeIntegration'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: >
+      /p:DeployOnBuild=true
+      /p:WebPublishMethod=Package
+      /p:PackageAsSingleFile=true
+      /p:SkipInvalidConfigurations=true
+      /p:PackageLocation="$(build.artifactStagingDirectory)"
+      /p:Configuration=$(buildConfiguration)
+      /p:AutoParameterizationWebConfigConnectionStrings=False
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+# 🗑️ Removed FileTransform@1 because Web.config transforms are handled at build time
+
+# ✅ Deploy to IIS
+- task: PowerShell@2
+  displayName: 'Deploy to IIS (config: $(buildConfiguration))'
+  condition: succeeded()
+  inputs:
+    targetType: 'inline'
+    script: |
+      $config = "$(buildConfiguration)"
+      $siteName = "$(siteName)"
+      $deployRoot = "$(deployRoot)\$config"
+      $version = "$(buildVersion)"
+      $versionedPath = Join-Path $deployRoot "HigbeeIntegration_v$version"
+
+      $zipPath = Get-ChildItem "$(Build.ArtifactStagingDirectory)\*.zip" | Select-Object -First 1
+      if (-not $zipPath) {
+          Write-Error "No deployment zip found in $(Build.ArtifactStagingDirectory)"
+          exit 1
+      }
+
+      Write-Host "Deploying to: $versionedPath"
+
+      if (Test-Path $versionedPath) {
+          Remove-Item -Recurse -Force $versionedPath
+      }
+
+      $tempExtract = Join-Path $env:TEMP ("zip_" + [guid]::NewGuid())
+      New-Item -Path $tempExtract -ItemType Directory | Out-Null
+      Expand-Archive -Path $zipPath.FullName -DestinationPath $tempExtract
+
+      $packageTmp = Get-ChildItem -Path $tempExtract -Recurse -Directory | Where-Object { $_.Name -eq 'PackageTmp' } | Select-Object -First 1
+      if (-not $packageTmp) {
+          Write-Error "Could not find 'PackageTmp' in extracted zip."
+          exit 1
+      }
+
+      New-Item -Path $versionedPath -ItemType Directory -Force | Out-Null
+      Copy-Item -Path "$($packageTmp.FullName)\*" -Destination $versionedPath -Recurse
+
+      Import-Module WebAdministration
+      $iisPath = "IIS:\Sites\$siteName"
+      if (Test-Path $iisPath) {
+          Set-ItemProperty $iisPath -Name physicalPath -Value $versionedPath
+          Write-Host "IIS site '$siteName' now points to: $versionedPath"
+      } else {
+          Write-Error "IIS site '$siteName' not found."
+          exit 1
+      }
+
+      Restart-WebItem $iisPath

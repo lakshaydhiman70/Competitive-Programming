@@ -74,53 +74,136 @@ using namespace std;
         return out << "(" << p.first << ", " << p.second << ")";
     }
 
+    template<typename K, typename V>
+    void printContainer(const map<K, V> &m) {
+        cerr << "{ ";
+        for (const auto &kv : m) cerr << kv.first << ": " << kv.second << ", ";
+        cerr << "}\n";
+    }
+
+    template<typename K, typename V>
+    void printContainer(const unordered_map<K, V> &m) {
+        cerr << "{ ";
+        for (const auto &kv : m) cerr << kv.first << ": " << kv.second << ", ";
+        cerr << "}\n";
+    }
+
     #define dbgv(v) cerr << #v << " = "; printContainer(v)
 #else
     #define dbg(...)
     #define dbgv(v)
 #endif
 
-void solve() {
-    int n;
-    cin>>n;
+void permute(vector<bool>&used, int n, vector<string>&ans, string s, string curr){
+    if(curr.size() == n){
+        ans.push_back(curr);
+        return;
+    }
 
-    int total = (n * 2) + 1;
-    int noOfOne = 0;
     for(int i=0; i<n; i++){
-        for(int j = 0; j < noOfOne; j++){
-            cout<<1;
+        dbgv(used);
+        if(!used[i]){
+            if(i !=0 && s[i] == s[i-1]&& !used[i - 1]) continue;
+            if(i != 0){
+                bool test = used[i-1];
+                auto t = test;
+            }
+            curr.push_back(s[i]);
+            used[i] = true;
+            permute(used, n, ans, s, curr);
+            curr.pop_back();
+            used[i] = false;
         }
+    }
+}
 
-        for(int k = noOfOne; k < n; k++){
-            cout<<0;
+
+void  combinationSum(int i, int n, int k, vector<int>&arr, vector<int>&temp){
+    
+    if (k < 0) return;
+    if (i == n) {
+        if (k == 0) {
+            for (int it : temp) cout << it << " ";
+            cout << endl;
+        }
+        return;
+    }
+
+    //pick
+    temp.push_back(arr[i]);
+    combinationSum(i, n, k - arr[i], arr, temp);
+
+    //not pick
+    temp.pop_back();
+    combinationSum(i + 1, n, k, arr, temp);
+}
+
+
+void combinationSum2(int idx, int k, vector<bool>&flag, vector<int>&arr, vector<int>&ans){
+    if(idx > arr.size()){
+        return;
+    }
+    if(k < 0)return;
+    if(k == 0){
+        for(auto &it: ans){
+            cout<<it<<" ";
+        }
+        cout<<endl;
+        return;
+    }
+
+    for(int i = idx; i<arr.size(); i++){
+        if(!flag[i] && (k - arr[i]) >= 0){
+
+            if(i > 0 && arr[i] == arr[i-1] && !flag[i-1]){
+                /*
+                Here we are checking if we are picking the current element and
+                the previous element is also same then we need to check if 
+                we have already picked the previous element yes or no if we have not picked 
+                it then we don't need to move forward.
+                here main motive is to pick the same elements together.
+                */
+                continue;
+            }
+
+            ans.push_back(arr[i]);
+            flag[i] = true;
+            combinationSum2(i+1, k - arr[i], flag, arr, ans);
+            ans.pop_back();
+            flag[i] = false;
+        }
+    }
+}
+
+void permutation(int idx, vector<int>&arr){
+    if(idx == arr.size()){
+        for(auto &it: arr){
+            cout<<it<<" ";
         }
 
         cout<<endl;
-
-        noOfOne++;
+        return;
     }
 
-    rep0(i, n){
-        cout<<1;
+
+    for(int i = idx; i<arr.size(); i++){
+        swap(arr[idx], arr[i]);
+        permutation(idx + 1, arr);
+        swap(arr[idx], arr[i]);
     }
-    cout<<endl;
+}
 
-    noOfOne = n - 1;
 
-    rep0(i, n-1){
+void solve() {
+    vector<int>arr = {2,5,2,1,2}, temp;
+    // combinationSum(0, arr.size(), 7, arr, temp);
 
-        for(int j = 0; j < noOfOne; j++){
-            cout<<1;
-        }
+    // sort(arr.begin(), arr.end());
+    // vector<bool>flag(arr.size(), false);
+    // combinationSum2(0, 5, flag, arr, temp);
 
-        for(int k = noOfOne; k < n; k++){
-            cout<<0;
-        }
-
-        cout<<endl;
-
-        noOfOne--;
-    }
+    vector<int>vec = {1, 2, 3};
+    permutation(0, vec);
 }
 
 int32_t main() {
