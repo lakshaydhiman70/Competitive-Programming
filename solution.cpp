@@ -194,17 +194,104 @@ void permutation(int idx, vector<int>&arr){
 }
 
 
-void solve() {
-    vector<int>arr = {2,5,2,1,2}, temp;
-    // combinationSum(0, arr.size(), 7, arr, temp);
+// void solve() {
+//     vector<int>arr = {2,5,2,1,2}, temp;
+//     // combinationSum(0, arr.size(), 7, arr, temp);
 
-    // sort(arr.begin(), arr.end());
-    // vector<bool>flag(arr.size(), false);
-    // combinationSum2(0, 5, flag, arr, temp);
+//     // sort(arr.begin(), arr.end());
+//     // vector<bool>flag(arr.size(), false);
+//     // combinationSum2(0, 5, flag, arr, temp);
 
-    vector<int>vec = {1, 2, 3};
-    permutation(0, vec);
+//     vector<int>vec = {1, 2, 3};
+//     permutation(0, vec);
+// }
+
+void print(int n){
+    if(n == 0)return;
+    print(n-1);
+    cout<<n<<endl;
 }
+
+void reverse(int i, int n, vector<int>&arr){
+    if(i == (n + 1)/2){
+        return;
+    }
+    int temp = arr[i];
+    arr[i] = arr[n - i - 1];
+    arr[n - i - 1] = temp;
+    reverse(i + 1, n, arr);
+}
+
+bool isPalindrome(int i, string s){
+    if(i == (s.size() + 1)/2){
+        return true;
+    }
+    
+    if(s[i] != s[s.size() - i - 1]){
+        return false;
+    }
+
+    return isPalindrome(i + 1, s);
+}
+
+int fibo(int n){
+    if(n == 0 || n == 1){
+        return n;
+    }
+
+    return fibo(n - 1) + fibo(n - 2);
+}
+
+void printSubseq(int i, int n, vector<int>&arr, vector<int>&vec){
+    if(i >= n){
+        for(auto &it: vec){
+            cout<<it<<" ";
+        }
+
+        cout<<endl;
+        return;
+    }
+
+    vec.push_back(arr[i]);
+    printSubseq(i + 1, n, arr, vec);
+
+    vec.pop_back();
+    printSubseq(i + 1, n, arr, vec);
+}
+
+void printSubSeqWithSumK(int i, int n, vector<int>&arr, vector<int>&temp, int sum, int k){
+    if(i == n){
+        if(sum == k){
+            for(auto &it: temp){
+            cout<<it<<" ";
+            }
+            cout<<endl;
+        }
+        return;
+    }
+
+    //pick
+    temp.push_back(arr[i]);
+    printSubSeqWithSumK(i + 1, n, arr, temp, sum + arr[i], k);
+
+    //not pick
+    temp.pop_back();
+    printSubSeqWithSumK(i + 1, n, arr, temp, sum, k);
+}
+
+bool printOneSubSeqWithSumK(int i, int n, vector<int>&arr, vector<int>&temp, int sum, int k){
+    
+}
+
+void solve() {
+    string s = "aama";
+    bool is = isPalindrome(0, s);
+    vector<int>arr = {1, 2, 1}, vec;
+    printSubSeqWithSumK(0, 3, arr, vec, 0, 2);
+    // cout<<is<<endl;
+}
+
+
 
 int32_t main() {
     fastio;
