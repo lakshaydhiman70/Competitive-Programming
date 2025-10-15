@@ -94,29 +94,25 @@ using namespace std;
     #define dbgv(v)
 #endif
 
-void permute(vector<bool>&used, int n, vector<string>&ans, string s, string curr){
-    if(curr.size() == n){
-        ans.push_back(curr);
-        return;
+int jump(vector<int>& arr) {
+    int n = arr.size();
+    int ct = 0;
+    int j = 0, i = 0;
+    while(j < n-1){
+        int mxval = 0;
+        while(i <= j){
+            mxval = max(mxval, i + arr[i]);
+            i++;
+        }
+
+        j = mxval;
+        ct++;
     }
 
-    for(int i=0; i<n; i++){
-        dbgv(used);
-        if(!used[i]){
-            if(i !=0 && s[i] == s[i-1]&& !used[i - 1]) continue;
-            if(i != 0){
-                bool test = used[i-1];
-                auto t = test;
-            }
-            curr.push_back(s[i]);
-            used[i] = true;
-            permute(used, n, ans, s, curr);
-            curr.pop_back();
-            used[i] = false;
-        }
-    }
+    return ct;
 }
 
+<<<<<<< Updated upstream
 
 void  combinationSum(int i, int n, int k, vector<int>&arr, vector<int>&temp){
     
@@ -210,6 +206,11 @@ void print(int n){
     if(n == 0)return;
     print(n-1);
     cout<<n<<endl;
+=======
+void solve() {
+    vector<int>inp = {1,2};
+    cout<<jump(inp);
+>>>>>>> Stashed changes
 }
 
 void reverse(int i, int n, vector<int>&arr){
