@@ -81,90 +81,46 @@ using namespace std;
 #endif
 
 
-/*
-given: 
-array of languages which person know which language.
+void solve() {
+    string a, b;
+    cin>>a>>b;
+    int n = a.size(), m = b.size();
 
-array of array where there are persons with friendships.
-
-Eg: 
-we need to make everyone to communicate in anyone single language.
-
-how can we do it?
-
-Example 1:
-
-Input: n = 2, languages = [[1],[2],[1,2]], 
-              friendships = [[1,2],[1,3],[2,3]]
-Output: 1
-Explanation: You can either teach user 1 the second language or
-             user 2 the first language.
-Example 2:
-
-Input: n = 3, languages = [[2],[1,3],[1,2],[3]], 
-              friendships = [[1,4],[1,2],[3,4],[2,3]]
-Output: 2
-Explanation: Teach the third language to users 1 and 3,
-             yielding two users to teach.
-
-
-if i have an array of languages like: 
-how many people speak one language;
-
-array like: [1, 2, 2, 1]
-we can have a map like: 
-1: 1
-2: 2
-3: 2
-4: 1
-
-first let's have an array like: which person knows which laguage:
-1: [2]
-2: [1, 3]
-3: [1, 2]
-4: [3]
-
-
-Lamen approach i am thinking about now:
-1. Find the language that most of the people speak.
-2. Find count of people needs to learn this language.
-*/
-
-
-vector<int> jobSequencing(vector<int> &d, vector<int> &p) {
-    // code here
-    int n = d.size();
-    vector<int>dp(n+1);
-    vector<pair<int, int>>inp;
-    for(int i=0; i<n; i++){
-        inp.push_back({p[i], d[i]});
-    }
-    
-    sort(inp.begin(), inp.end(), [](pair<int,int> &a, pair<int,int> &b) {
-        return a.first > b.first;  
-    });
-
-    dbgv(inp);
-
-    int ans = 0, jobct = 0;
-    for(auto it: inp){
-        if(dp[it.second] == 0){
-            jobct++;
-            dp[it.second] = 1;
-            ans+=it.first;
+    if(n == m){
+        if(a[0] != b[0]){
+            NO;
+            return;
         }
     }
-    
-    return {jobct, ans};
-}
 
-void solve() {
-    vector<int>d = {2, 1, 2, 1, 1};
-    vector<int>p = {100, 19, 27, 25, 15};
-    auto ans = jobSequencing(d, p);
-    for(auto it: ans){
-        cout<<it<<" ";
+    vector<int>alp(m, -1), dp(n);
+
+    for(int i=m-1; i>=0; i--){
+        for(int j=n-1; j>=0; j--){
+            if(dp[j] == 0 && b[i] == a[j]){
+                dp[j] = 1;
+                alp[i] = j;
+                break;
+            }
+        }
     }
+
+    dbgv(alp);
+
+    if(alp[0]== -1){
+        NO;
+        return; 
+    }
+
+    for(int i=1; i<m; i++){
+        
+        if(alp[i]== -1 || alp[i-1] > alp[i]){
+            NO;
+            return;
+        }
+    }
+
+    YES;
 }
 
 int32_t main() {
@@ -174,6 +130,6 @@ int32_t main() {
         freopen("output.txt", "w", stdout);
     #endif
     int t = 1;
-    // cin>>t;
+    cin>>t;
     while(t--) solve();
 }

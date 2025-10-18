@@ -82,89 +82,89 @@ using namespace std;
 
 
 /*
-given: 
-array of languages which person know which language.
+    we have to replace tires
+    we have to replace n tires:
+    There are two types of busses: 
+    one with 2 axles which is having 4tires
+    one with 4 axles which is having 6tires
 
-array of array where there are persons with friendships.
-
-Eg: 
-we need to make everyone to communicate in anyone single language.
-
-how can we do it?
-
-Example 1:
-
-Input: n = 2, languages = [[1],[2],[1,2]], 
-              friendships = [[1,2],[1,3],[2,3]]
-Output: 1
-Explanation: You can either teach user 1 the second language or
-             user 2 the first language.
-Example 2:
-
-Input: n = 3, languages = [[2],[1,3],[1,2],[3]], 
-              friendships = [[1,4],[1,2],[3,4],[2,3]]
-Output: 2
-Explanation: Teach the third language to users 1 and 3,
-             yielding two users to teach.
+    the main problem here is we have given total no of tires as n
+    and we need to determine total no of min and max buses we
+    can have.
 
 
-if i have an array of languages like: 
-how many people speak one language;
+    10: max: 2: min: 2;
+    12: max: 3, min: 2;
+    14: max: 3, min: 3;
 
-array like: [1, 2, 2, 1]
-we can have a map like: 
-1: 1
-2: 2
-3: 2
-4: 1
+    20: max: 6 + 4: 
 
-first let's have an array like: which person knows which laguage:
-1: [2]
-2: [1, 3]
-3: [1, 2]
-4: [3]
+    if one we can make from combination then?
+    20: 6*2 and 4*2
+    is there any other way here?
 
+    yes: 4*5
 
-Lamen approach i am thinking about now:
-1. Find the language that most of the people speak.
-2. Find count of people needs to learn this language.
+    let's start with 4:
+    4 = 1, 6 = 0
+
+    6:
+    4 = 0, 6 = 1
+
+    8: 
+    4 = 2. 6 = 0
+
+    10: 
+    4 = 1, 6 = 1
+
+    12: 4 = 0, 6 = 2 & 4 = 3
+
+    14: 4 = 2, 6 = 1
+
+    16: 
 */
 
-
-vector<int> jobSequencing(vector<int> &d, vector<int> &p) {
-    // code here
-    int n = d.size();
-    vector<int>dp(n+1);
-    vector<pair<int, int>>inp;
-    for(int i=0; i<n; i++){
-        inp.push_back({p[i], d[i]});
-    }
-    
-    sort(inp.begin(), inp.end(), [](pair<int,int> &a, pair<int,int> &b) {
-        return a.first > b.first;  
-    });
-
-    dbgv(inp);
-
-    int ans = 0, jobct = 0;
-    for(auto it: inp){
-        if(dp[it.second] == 0){
-            jobct++;
-            dp[it.second] = 1;
-            ans+=it.first;
-        }
-    }
-    
-    return {jobct, ans};
-}
-
 void solve() {
-    vector<int>d = {2, 1, 2, 1, 1};
-    vector<int>p = {100, 19, 27, 25, 15};
-    auto ans = jobSequencing(d, p);
-    for(auto it: ans){
-        cout<<it<<" ";
+    int n;
+    cin>>n;
+
+    if(n < 4 || isOdd(n)){
+        cout<<-1<<endl;
+        return;
     }
+
+    //find max
+    int mxval = 0;
+    int fours = n / 4;
+    int rem = n % 4;
+    if(rem > 0 && rem < 6){
+        fours--;
+        rem+=4;
+    }
+
+    int six = rem / 6;
+
+    mxval = fours + six;
+
+    //min val
+
+    int mnval = 0;
+    six = 0;
+    fours = 0;
+
+    six = n / 6;
+    rem = n % 6;
+
+    if(rem > 0 && rem < 4){
+        six--;
+        rem+=6;
+    }
+
+    fours = rem / 4;
+
+    mnval = fours + six;
+
+    cout<<mnval<<" "<<mxval<<endl;
 }
 
 int32_t main() {
@@ -174,6 +174,6 @@ int32_t main() {
         freopen("output.txt", "w", stdout);
     #endif
     int t = 1;
-    // cin>>t;
+    cin>>t;
     while(t--) solve();
 }
