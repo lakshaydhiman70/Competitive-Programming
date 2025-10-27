@@ -112,7 +112,6 @@ int jump(vector<int>& arr) {
     return ct;
 }
 
-<<<<<<< Updated upstream
 
 void  combinationSum(int i, int n, int k, vector<int>&arr, vector<int>&temp){
     
@@ -206,11 +205,6 @@ void print(int n){
     if(n == 0)return;
     print(n-1);
     cout<<n<<endl;
-=======
-void solve() {
-    vector<int>inp = {1,2};
-    cout<<jump(inp);
->>>>>>> Stashed changes
 }
 
 void reverse(int i, int n, vector<int>&arr){
