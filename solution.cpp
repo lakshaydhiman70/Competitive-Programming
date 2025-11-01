@@ -94,186 +94,33 @@ using namespace std;
     #define dbgv(v)
 #endif
 
-int jump(vector<int>& arr) {
-    int n = arr.size();
-    int ct = 0;
-    int j = 0, i = 0;
-    while(j < n-1){
-        int mxval = 0;
-        while(i <= j){
-            mxval = max(mxval, i + arr[i]);
-            i++;
-        }
 
-        j = mxval;
-        ct++;
+int candy(int wrappers, int wrappersNeeded, int totalCandies) {
+    while (wrappers >= wrappersNeeded) {
+        int newCandies = wrappers / wrappersNeeded;
+        totalCandies += newCandies;
+        wrappers = newCandies + (wrappers % wrappersNeeded);
     }
-
-    return ct;
+    return totalCandies;
 }
 
+/*
+15, 1, 3
 
-void  combinationSum(int i, int n, int k, vector<int>&arr, vector<int>&temp){
-    
-    if (k < 0) return;
-    if (i == n) {
-        if (k == 0) {
-            for (int it : temp) cout << it << " ";
-            cout << endl;
-        }
-        return;
-    }
+15 -> 1 -> 15 candies
 
-    //pick
-    temp.push_back(arr[i]);
-    combinationSum(i, n, k - arr[i], arr, temp);
+15/3 -> 5 candies
 
-    //not pick
-    temp.pop_back();
-    combinationSum(i + 1, n, k, arr, temp);
-}
+5 -> 5/3 -> 1 candies, 2 wrapper
 
-
-void combinationSum2(int idx, int k, vector<bool>&flag, vector<int>&arr, vector<int>&ans){
-    if(idx > arr.size()){
-        return;
-    }
-    if(k < 0)return;
-    if(k == 0){
-        for(auto &it: ans){
-            cout<<it<<" ";
-        }
-        cout<<endl;
-        return;
-    }
-
-    for(int i = idx; i<arr.size(); i++){
-        if(!flag[i] && (k - arr[i]) >= 0){
-
-            if(i > 0 && arr[i] == arr[i-1] && !flag[i-1]){
-                /*
-                Here we are checking if we are picking the current element and
-                the previous element is also same then we need to check if 
-                we have already picked the previous element yes or no if we have not picked 
-                it then we don't need to move forward.
-                here main motive is to pick the same elements together.
-                */
-                continue;
-            }
-
-            ans.push_back(arr[i]);
-            flag[i] = true;
-            combinationSum2(i+1, k - arr[i], flag, arr, ans);
-            ans.pop_back();
-            flag[i] = false;
-        }
-    }
-}
-
-void permutation(int idx, vector<int>&arr){
-    if(idx == arr.size()){
-        for(auto &it: arr){
-            cout<<it<<" ";
-        }
-
-        cout<<endl;
-        return;
-    }
-
-
-    for(int i = idx; i<arr.size(); i++){
-        swap(arr[idx], arr[i]);
-        permutation(idx + 1, arr);
-        swap(arr[idx], arr[i]);
-    }
-}
-
-void print(int n){
-    if(n == 0)return;
-    print(n-1);
-    cout<<n<<endl;
-}
-
-void reverse(int i, int n, vector<int>&arr){
-    if(i == (n + 1)/2){
-        return;
-    }
-    int temp = arr[i];
-    arr[i] = arr[n - i - 1];
-    arr[n - i - 1] = temp;
-    reverse(i + 1, n, arr);
-}
-
-bool isPalindrome(int i, string s){
-    if(i == (s.size() + 1)/2){
-        return true;
-    }
-    
-    if(s[i] != s[s.size() - i - 1]){
-        return false;
-    }
-
-    return isPalindrome(i + 1, s);
-}
-
-int fibo(int n){
-    if(n == 0 || n == 1){
-        return n;
-    }
-
-    return fibo(n - 1) + fibo(n - 2);
-}
-
-void printSubseq(int i, int n, vector<int>&arr, vector<int>&vec){
-    if(i >= n){
-        for(auto &it: vec){
-            cout<<it<<" ";
-        }
-
-        cout<<endl;
-        return;
-    }
-
-    vec.push_back(arr[i]);
-    printSubseq(i + 1, n, arr, vec);
-
-    vec.pop_back();
-    printSubseq(i + 1, n, arr, vec);
-}
-
-void printSubSeqWithSumK(int i, int n, vector<int>&arr, vector<int>&temp, int sum, int k){
-    if(i == n){
-        if(sum == k){
-            for(auto &it: temp){
-            cout<<it<<" ";
-            }
-            cout<<endl;
-        }
-        return;
-    }
-
-    //pick
-    temp.push_back(arr[i]);
-    printSubSeqWithSumK(i + 1, n, arr, temp, sum + arr[i], k);
-
-    //not pick
-    temp.pop_back();
-    printSubSeqWithSumK(i + 1, n, arr, temp, sum, k);
-}
-
-bool printOneSubSeqWithSumK(int i, int n, vector<int>&arr, vector<int>&temp, int sum, int k){
-    
-}
-
+3 wrapper -> 1
+*/
 void solve() {
-    string s = "aama";
-    bool is = isPalindrome(0, s);
-    vector<int>arr = {1, 2, 1}, vec;
-    printSubSeqWithSumK(0, 3, arr, vec, 0, 2);
-    // cout<<is<<endl;
+    int m, p, w;
+    cin>>m>>p>>w;
+
+    cout<<candy(m/p, w, m/p)<<endl;
 }
-
-
 
 int32_t main() {
     fastio;
@@ -282,6 +129,6 @@ int32_t main() {
         freopen("output.txt", "w", stdout);
     #endif
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--) solve();
 }
