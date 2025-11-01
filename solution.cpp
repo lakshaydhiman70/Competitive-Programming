@@ -188,19 +188,6 @@ void permutation(int idx, vector<int>&arr){
     }
 }
 
-
-// void solve() {
-//     vector<int>arr = {2,5,2,1,2}, temp;
-//     // combinationSum(0, arr.size(), 7, arr, temp);
-
-//     // sort(arr.begin(), arr.end());
-//     // vector<bool>flag(arr.size(), false);
-//     // combinationSum2(0, 5, flag, arr, temp);
-
-//     vector<int>vec = {1, 2, 3};
-//     permutation(0, vec);
-// }
-
 void print(int n){
     if(n == 0)return;
     print(n-1);
