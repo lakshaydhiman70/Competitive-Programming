@@ -1,11 +1,3 @@
-10
-GK GK
-F F
-H D
-ZQ QZ
-C C
-FN NF
-S S
-C C
-EM C
-XO C
+2
+16 2 2
+15 1 3
