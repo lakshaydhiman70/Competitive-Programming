@@ -94,6 +94,31 @@ using namespace std;
     #define dbgv(v)
 #endif
 
+
+int largestRectangleArea(vector<int>& arr) {
+    stack<int>st;
+    int maxArea = 0;
+    int n = arr.size();
+    for(int i=0; i<n; i++){
+        while(!st.empty() && arr[st.top()]>arr[i]){
+            int element = st.top(); st.pop();
+            int nse = i;
+            int pse = st.empty()? -1: st.top();
+            maxArea = max(arr[element] * (nse - pse - 1), maxArea);
+        }
+        st.push(i);
+    }
+
+    while(!st.empty()){
+        int nse = n;
+        int element = st.top(); st.pop();
+        int pse = st.empty() ? -1 : st.top();
+        maxArea = max(maxArea, (nse - pse - 1)* arr[element]);
+    }
+
+    return maxArea;
+}
+
 void solve() {
     int n;
     cin>>n;
